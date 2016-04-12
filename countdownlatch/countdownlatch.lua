@@ -1,3 +1,7 @@
+local lrucache = require "resty.lrucache"
+local cache = lrucache.new(1)
+cache.set("closed", false)
+
 local CountdownLatch = {}
 
 CountdownLatch.__index = CountdownLatch
@@ -12,9 +16,15 @@ function CountdownLatch:new(name, value, driver_type, connection)
     }, CountdownLatch)
 end
 
--- TODO add local cache
 function CountdownLatch:countdown()
-    return self.driver:countdown(self.name)
+    if cache.get("closed") then
+        return false
+    end
+    local succ = self.driver:countdown(self.name)
+    if not succ then
+        cache.set("closed", true)
+    end
+    return succ
 end
 
 return CountdownLatch
