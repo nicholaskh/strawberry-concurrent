@@ -4,7 +4,7 @@ CountdownLatch.__index = CountdownLatch
 
 function CountdownLatch:new(name, value, driver_type, connection)
     local DriverFactory = require "framework.concurrent.countdownlatch.driver_factory"
-    local driver = driver_factory:factory(driver_type, connection, name, value)
+    local driver = DriverFactory:factory(driver_type, connection, name, value)
     return setmetatable({
         name = name,
         value = value,
