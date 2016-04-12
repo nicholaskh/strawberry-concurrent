@@ -17,7 +17,7 @@ function RedisDriver:init(name, value)
 end
 
 function RedisDriver:countdown(name)
-    local ret = self.connection:query({"decr", name})
+    local ret = self.connection:query("decr", name)
     if ret <= 0 then
         return false
     end
